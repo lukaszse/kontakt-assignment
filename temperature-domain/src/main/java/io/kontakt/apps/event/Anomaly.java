@@ -1,4 +1,4 @@
-package io.kontak.apps.event;
+package io.kontakt.apps.event;
 
 import java.time.Instant;
 

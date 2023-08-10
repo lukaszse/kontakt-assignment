@@ -1,4 +1,4 @@
-package io.kontak.apps.temperature.generator.config;
+package io.kontakt.apps.temperature.generator.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -8,9 +8,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.kontak.apps.event.TemperatureReading;
-import io.kontak.apps.temperature.generator.TemperatureStreamPublisher;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import io.kontakt.apps.event.TemperatureReading;
+import io.kontakt.apps.temperature.generator.TemperatureStreamPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -20,7 +19,7 @@ import java.util.TimeZone;
 import java.util.function.Supplier;
 
 @Configuration
-public class KafkaConfig {
+class KafkaConfig {
 
     @Bean
     public Supplier<Flux<Message<TemperatureReading>>> messageProducer(TemperatureStreamPublisher publisher) {

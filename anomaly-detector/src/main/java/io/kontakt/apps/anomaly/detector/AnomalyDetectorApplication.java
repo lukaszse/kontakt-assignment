@@ -1,4 +1,4 @@
-package io.kontak.apps.anomaly.detector;
+package io.kontakt.apps.anomaly.detector;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

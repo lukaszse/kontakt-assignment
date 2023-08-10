@@ -1,7 +1,7 @@
-package io.kontak.apps.anomaly.detector;
+package io.kontakt.apps.anomaly.detector;
 
-import io.kontak.apps.event.Anomaly;
-import io.kontak.apps.event.TemperatureReading;
+import io.kontakt.apps.event.Anomaly;
+import io.kontakt.apps.event.TemperatureReading;
 import org.apache.kafka.streams.kstream.KStream;
 
 import java.util.List;

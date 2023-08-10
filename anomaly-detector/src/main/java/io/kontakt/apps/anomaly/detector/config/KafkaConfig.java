@@ -1,9 +1,9 @@
-package io.kontak.apps.anomaly.detector.config;
+package io.kontakt.apps.anomaly.detector.config;
 
-import io.kontak.apps.anomaly.detector.AnomalyDetector;
-import io.kontak.apps.anomaly.detector.TemperatureMeasurementsListener;
-import io.kontak.apps.event.Anomaly;
-import io.kontak.apps.event.TemperatureReading;
+import io.kontakt.apps.anomaly.detector.AnomalyDetector;
+import io.kontakt.apps.anomaly.detector.TemperatureMeasurementsListener;
+import io.kontakt.apps.event.Anomaly;
+import io.kontakt.apps.event.TemperatureReading;
 import org.apache.kafka.streams.kstream.KStream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

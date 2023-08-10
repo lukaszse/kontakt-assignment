@@ -1,7 +1,7 @@
-package io.kontak.apps.anomaly.detector;
+package io.kontakt.apps.anomaly.detector;
 
-import io.kontak.apps.event.Anomaly;
-import io.kontak.apps.event.TemperatureReading;
+import io.kontakt.apps.event.Anomaly;
+import io.kontakt.apps.event.TemperatureReading;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

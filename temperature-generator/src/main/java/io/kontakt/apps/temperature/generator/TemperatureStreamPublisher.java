@@ -1,7 +1,6 @@
-package io.kontak.apps.temperature.generator;
+package io.kontakt.apps.temperature.generator;
 
-import io.kontak.apps.event.TemperatureReading;
-import org.springframework.kafka.support.KafkaHeaders;
+import io.kontakt.apps.event.TemperatureReading;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
