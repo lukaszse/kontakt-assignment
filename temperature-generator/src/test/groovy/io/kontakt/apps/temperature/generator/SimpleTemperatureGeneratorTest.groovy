@@ -1,13 +1,14 @@
 package io.kontakt.apps.temperature.generator
 
+
 import spock.lang.Specification
 
 import java.util.stream.IntStream
 
 import static io.kontakt.apps.temperature.generator.SimpleTemperatureGenerator.CONSTANT_CHARACTERISTIC
 import static io.kontakt.apps.temperature.generator.SimpleTemperatureGenerator.HARMONIC_CHARACTERISTIC
-import static io.kontakt.apps.temperature.generator.TestData.isBetween
-import static io.kontakt.apps.temperature.generator.TestData.prepareHarmonicTempGenerator
+import static io.kontakt.apps.temperature.generator.utils.TestData.isBetween
+import static io.kontakt.apps.temperature.generator.utils.TestData.prepareHarmonicTempGenerator
 
 class SimpleTemperatureGeneratorTest extends Specification {
 

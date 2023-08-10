@@ -12,7 +12,7 @@ class TemperatureGeneratorConfig {
 
     @Bean
     TemperatureGenerator temperatureGenerator() {
-        return SimpleTemperatureGenerator.of(
+        return new SimpleTemperatureGenerator(
                 3,
                 3,
                 0.5,

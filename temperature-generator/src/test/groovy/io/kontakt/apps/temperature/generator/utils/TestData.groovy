@@ -1,4 +1,6 @@
-package io.kontakt.apps.temperature.generator
+package io.kontakt.apps.temperature.generator.utils
+
+import io.kontakt.apps.temperature.generator.SimpleTemperatureGenerator
 
 import java.util.function.BiFunction
 
@@ -16,7 +18,7 @@ class TestData {
                                                                    BiFunction<Long, Double, Double> characteristic,
                                                                    double standardDeviation,
                                                                    double intMeanValue) {
-        SimpleTemperatureGenerator.of(
+        new SimpleTemperatureGenerator(
                 numberOfRooms,
                 numberOfThermometersPerRoom,
                 standardDeviation,
