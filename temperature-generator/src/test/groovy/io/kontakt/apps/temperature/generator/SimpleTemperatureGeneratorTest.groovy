@@ -38,7 +38,7 @@ class SimpleTemperatureGeneratorTest extends Specification {
         characteristic          | standardDeviation | intMeanValie | min | max
         HARMONIC_CHARACTERISTIC | 0.5               | 20           | 15  | 25
         HARMONIC_CHARACTERISTIC | 1.0               | 50           | 44  | 56
-        CONSTANT_CHARACTERISTIC | 0.5               | 20           | 16  | 24
+        CONSTANT_CHARACTERISTIC | 0.5               | 30           | 25  | 35
         CONSTANT_CHARACTERISTIC | 4.0               | 100          | 88  | 112
     }
 

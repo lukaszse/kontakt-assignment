@@ -1,4 +1,4 @@
-package io.kontakt.apps.anomaly.detector;
+package io.kontakt.apps.anomaly.detector.testUtils;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

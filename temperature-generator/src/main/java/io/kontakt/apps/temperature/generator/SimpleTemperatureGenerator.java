@@ -20,6 +20,14 @@ public class SimpleTemperatureGenerator
         extends AbstractTemperatureGenerator
         implements TemperatureGenerator {
 
+    // I have decided to divide the temperature generator ("generateTemperature()") into 3 separate generators where each generator is responsible for given step.
+    // Following steps are perormed:
+    // 1. Generation of main characteristic (I have provided two default characteristic: constant and harmonic).
+    // 2. Generation of noise (I have provided simple noise generator which use function which generates normal distribution)
+    // 3. Generation of disruptions/anomalies (I have provided simple algorithm which generates anomaly for random reading with given probability)
+    // All steps are pluggable and can be configured/injected while plugin instantiation.
+    // Temperature readings are generated for defined number of rooms and defined of number of thermometers per each room.
+
     public static final BiFunction<Long, Double, Double> CONSTANT_CHARACTERISTIC = (measurementNo, meanValue) -> meanValue;
     public static final BiFunction<Double, Double, Double> BASIC_NOISE_GENERATOR = SimpleTemperatureGenerator::generateNoise;
     public static final BiFunction<Long, Double, Double> HARMONIC_CHARACTERISTIC = prepareHarmonicCharacteristic();

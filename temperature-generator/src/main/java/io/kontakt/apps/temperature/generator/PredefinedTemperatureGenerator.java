@@ -13,6 +13,10 @@ public class PredefinedTemperatureGenerator
         extends AbstractTemperatureGenerator
         implements TemperatureGenerator {
 
+    // This is an alternative temperature generator which does not draw numbers, but just takes them from
+    // list of predefined readings provided while instantiation.
+    // This list of temperatures can be for example read from any file, as it is shown within the unit test of this generator.
+
     private final List<Double> predefinedTemperatures;
 
     protected PredefinedTemperatureGenerator(final int numberOfRooms,

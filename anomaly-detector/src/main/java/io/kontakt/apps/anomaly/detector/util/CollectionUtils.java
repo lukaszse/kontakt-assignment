@@ -6,10 +6,10 @@ import java.util.List;
 
 public class CollectionUtils {
 
-    // Apache commons library could be also used instead
-    public static <E> List<E> union(Collection<E> col1, Collection<E> col2) {
-        final List<E> newList = new ArrayList<>(col1);
-        newList.addAll(col2);
-        return newList;
+    public static double calculateMeanValue(List<Double> values) {
+        return values.stream()
+                .mapToDouble(temp -> temp)
+                .average()
+                .orElseThrow();
     }
 }
