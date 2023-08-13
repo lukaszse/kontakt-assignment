@@ -1,5 +1,6 @@
-package io.kontakt.apps.anomaly.analytics;
+package io.kontakt.apps.anomaly.analytics.api;
 
+import io.kontakt.apps.anomaly.analytics.service.AnomalyServicePort;
 import io.kontakt.apps.event.Anomaly;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.NotNull;
 import java.awt.print.Pageable;
 import java.util.List;
 
@@ -36,7 +36,7 @@ class AnomalyEndpoint {
 
     private static final String X_TOTAL_COUNT_HEADER = "x-total-count";
 
-    private final AnomalyService anomalyService;
+    private final AnomalyServicePort anomalyServicePort;
 
 
     // Pagination implemented only for one endpoint (taking into consideration the potential huge number of data, it should be implemented for all endpoints which return a list of objects)
@@ -55,7 +55,7 @@ class AnomalyEndpoint {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<List<Anomaly>>> findAll(final Pageable pageable) {
         log.info("Find all anomalies for thermometerId");
-        return anomalyService.findAllAnomalies(pageable)
+        return anomalyServicePort.findAllAnomalies(pageable)
                 .doOnSuccess(anomalies -> log.info("{} anomalies found.", anomalies.size()))
                 .map(tuple -> ResponseEntity.ok().headers(prepareXTotalCountHeader(tuple.getT2())).body(tuple.getT1()));
     }
@@ -72,7 +72,7 @@ class AnomalyEndpoint {
     @GetMapping(value = "/{thermometerId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<List<Anomaly>>> findAnomaliesByThermometerId(@PathVariable final String thermometerId) {
         log.info("Find anomalies for thermometerId={}", thermometerId);
-        return anomalyService.findByThermometerId(thermometerId)
+        return anomalyServicePort.findByThermometerId(thermometerId)
                 .doOnSuccess(anomalies -> log.info("{} anomalies for thermometerId={} found.", anomalies.size(), thermometerId))
                 .map(ResponseEntity::ok);
     }
@@ -89,7 +89,7 @@ class AnomalyEndpoint {
     @GetMapping(value = "/rooms/{roomId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<List<Anomaly>>> findAnomaliesByRoomId(@PathVariable final String roomId) {
         log.info("Find anomalies for roomId={}", roomId);
-        return anomalyService.findByRoomId(roomId)
+        return anomalyServicePort.findByRoomId(roomId)
                 .doOnSuccess(anomalies -> log.info("{} anomalies for thermometerId={} found.", anomalies.size(), roomId))
                 .map(ResponseEntity::ok);
     }
@@ -106,7 +106,7 @@ class AnomalyEndpoint {
     @GetMapping(value = "/thermometers", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<List<String>>> findThermometerWhereNumberOfAnomaliesIsGreaterThan(@RequestParam final int anomaliesThreshold) {
         log.info("Find thermometers where number of anomalies is greater than {}", anomaliesThreshold);
-        return anomalyService.findThermometersWithNumberOfAnomaliesHigherThan(anomaliesThreshold)
+        return anomalyServicePort.findThermometersWithNumberOfAnomaliesHigherThan(anomaliesThreshold)
                 .doOnSuccess(anomalies -> log.info("{} anomalies for thermometerId={} found.", anomalies.size(), anomaliesThreshold))
                 .map(ResponseEntity::ok);
     }

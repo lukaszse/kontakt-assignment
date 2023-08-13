@@ -1,7 +1,8 @@
 package io.kontakt.apps.anomaly.analytics.testUtils
 
 import groovy.util.logging.Slf4j
-import io.kontakt.apps.anomaly.analytics.AnomalyRepository
+import io.kontakt.apps.anomaly.analytics.infrastructure.AnomalyPersistencePort
+import io.kontakt.apps.anomaly.analytics.infrastructure.AnomalyRepository
 import io.kontakt.apps.event.Anomaly
 
 import java.time.Instant
@@ -15,10 +16,10 @@ class AnomalyTestUtils {
     public static final String ROOM_ID = "roomId"
 
 
-    static def populateDatabase(AnomalyRepository anomalyRepository, int numberOfAnomalies, String thermometerId) {
+    static def populateDatabase(AnomalyPersistencePort anomalyPersistencePort, int numberOfAnomalies, String thermometerId) {
         def anomaliesToAdd = generateAnomalies(numberOfAnomalies, thermometerId)
         def addedAnomalies = anomaliesToAdd.stream()
-                .map { anomalyRepository.save(it) }
+                .map { anomalyPersistencePort.save(it) }
                 .collect{it.block()}
         log.info("Anomalies added to database: {}", addedAnomalies)
     }

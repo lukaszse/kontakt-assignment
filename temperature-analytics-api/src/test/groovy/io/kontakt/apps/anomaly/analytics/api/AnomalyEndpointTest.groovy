@@ -1,6 +1,8 @@
-package io.kontakt.apps.anomaly.analytics
+package io.kontakt.apps.anomaly.analytics.api
 
+import io.kontakt.apps.anomaly.analytics.infrastructure.AnomalyPersistencePort
 import io.kontakt.apps.anomaly.analytics.testUtils.AbstractEndpointSpec
+import io.kontakt.apps.anomaly.analytics.testUtils.AnomalyTestUtils
 import io.kontakt.apps.event.Anomaly
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.ParameterizedTypeReference
@@ -16,10 +18,10 @@ import static io.kontakt.apps.anomaly.analytics.testUtils.AnomalyTestUtils.popul
 class AnomalyEndpointTest extends AbstractEndpointSpec {
 
     @Autowired
-    AnomalyRepository anomalyRepository
+    AnomalyPersistencePort anomalyPersistencePort
 
     def cleanup() {
-        anomalyRepository.deleteAll().block()
+        anomalyPersistencePort.deleteAll().block()
     }
 
     def "check is Spook int tests works :)"() {
@@ -31,11 +33,11 @@ class AnomalyEndpointTest extends AbstractEndpointSpec {
     def 'should find thermometers where anomaly number exceeds threshold'() {
 
         given: 'populate database with test data'
-        populateDatabase(anomalyRepository, numberOfAnomaliesPerThermometer, "thermometerId")
+        populateDatabase(anomalyPersistencePort, numberOfAnomaliesPerThermometer, "thermometerId")
 
         and: 'prepare request to get anomalies'
         def request =
-                RequestEntity.get(ANOMALIES_URL_PATTERN.formatted(port, "/thermometers?anomaliesThreshold=%d".formatted(threshold)))
+                RequestEntity.get(AnomalyTestUtils.ANOMALIES_URL_PATTERN.formatted(port, "/thermometers?anomaliesThreshold=%d".formatted(threshold)))
                         .accept(MediaType.APPLICATION_JSON)
                         .build()
 
@@ -61,11 +63,11 @@ class AnomalyEndpointTest extends AbstractEndpointSpec {
 
         given: 'populate database with test data'
 
-        populateDatabase(anomalyRepository, numberOfAnomaliesPerThermometer, "thermometerId")
+        populateDatabase(anomalyPersistencePort, numberOfAnomaliesPerThermometer, "thermometerId")
 
         and: 'prepare request to get anomalies'
         def request =
-                RequestEntity.get(ANOMALIES_URL_PATTERN.formatted(port, "/thermometers?anomaliesThreshold=%d".formatted(threshold)))
+                RequestEntity.get(AnomalyTestUtils.ANOMALIES_URL_PATTERN.formatted(port, "/thermometers?anomaliesThreshold=%d".formatted(threshold)))
                         .accept(MediaType.APPLICATION_JSON)
                         .build()
 
@@ -90,7 +92,7 @@ class AnomalyEndpointTest extends AbstractEndpointSpec {
         given: 'populate database with test data'
 
         def thermometerID = "thermometerID"
-        populateDatabase(anomalyRepository, numberOfAnomaliesInDatabase, thermometerID)
+        populateDatabase(anomalyPersistencePort, numberOfAnomaliesInDatabase, thermometerID)
 
         and: 'prepare request to get anomalies'
         def request =

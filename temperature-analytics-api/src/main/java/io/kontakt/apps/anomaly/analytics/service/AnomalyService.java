@@ -1,10 +1,10 @@
-package io.kontakt.apps.anomaly.analytics;
+package io.kontakt.apps.anomaly.analytics.service;
 
 import io.kontakt.apps.anomaly.analytics.exception.NotFoundException;
+import io.kontakt.apps.anomaly.analytics.infrastructure.AnomalyPersistencePort;
 import io.kontakt.apps.event.Anomaly;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -13,25 +13,24 @@ import java.awt.print.Pageable;
 import java.util.List;
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
-class AnomalyService {
+class AnomalyService implements AnomalyServicePort {
 
     private static final String NOT_FOUND_ERROR_MESSAGE = "No anomalies with meeting criteria found. %s";
 
-    private final AnomalyRepository anomalyRepository;
+    private final AnomalyPersistencePort anomalyPersistencePort;
 
 
     public Mono<Tuple2<List<Anomaly>, Long>> findAllAnomalies(final Pageable pageable) {
-        return anomalyRepository.findAllBy(pageable)
+        return anomalyPersistencePort.findAllBy(pageable)
                 .switchIfEmpty(Mono.error(new NotFoundException(NOT_FOUND_ERROR_MESSAGE)))
                 .doOnError(error -> log.error("Error while reading anomalies. Error={}", error.getMessage()))
                 .collectList()
-                .zipWith(anomalyRepository.count());
+                .zipWith(anomalyPersistencePort.count());
     }
 
     public Mono<List<Anomaly>> findByThermometerId(final String thermometerId) {
-        return anomalyRepository.findAllByThermometerId(thermometerId)
+        return anomalyPersistencePort.findAllByThermometerId(thermometerId)
                 .switchIfEmpty(Mono.error(
                         new NotFoundException(NOT_FOUND_ERROR_MESSAGE.formatted("Criteria: thermometerId=%s".formatted(thermometerId)))))
                 .doOnError(error -> log.error("Error while reading anomalies where thermometerId={}. Error={}", thermometerId, error.getMessage()))
@@ -39,7 +38,7 @@ class AnomalyService {
     }
 
     public Mono<List<Anomaly>> findByRoomId(final String roomId) {
-        return anomalyRepository.findAllByRoomId(roomId)
+        return anomalyPersistencePort.findAllByRoomId(roomId)
                 .switchIfEmpty(Mono.error(
                         new NotFoundException(NOT_FOUND_ERROR_MESSAGE.formatted("Criteria: thermometerId=%s".formatted(roomId)))))
                 .doOnError(error -> log.error("Error while reading anomalies where roomId={}. . Error={}", roomId, error.getMessage()))
@@ -51,11 +50,11 @@ class AnomalyService {
     // Following solution is not optimal because uses two separate request to database, while solution with aggregation on database
     // would result  only single request.
     public Mono<List<String>> findThermometersWithNumberOfAnomaliesHigherThan(final int numberOfAnomaliesThreshold) {
-        final Flux<String> thermometerIds = anomalyRepository.findAll()
+        final Flux<String> thermometerIds = anomalyPersistencePort.findAll()
                 .map(Anomaly::thermometerId)
                 .distinct();
         return thermometerIds
-                .flatMap(thermometerId -> anomalyRepository.countAllByThermometerId(thermometerId)
+                .flatMap(thermometerId -> anomalyPersistencePort.countAllByThermometerId(thermometerId)
                         .filter(anomaliesForThermometer -> anomaliesForThermometer >= numberOfAnomaliesThreshold)
                         .switchIfEmpty(Mono.error(
                                 new NotFoundException(NOT_FOUND_ERROR_MESSAGE.formatted("Criteria: number of anomalies > %s"
