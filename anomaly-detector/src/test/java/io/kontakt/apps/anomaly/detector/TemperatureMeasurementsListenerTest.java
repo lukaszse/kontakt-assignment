@@ -1,5 +1,9 @@
 package io.kontakt.apps.anomaly.detector;
 
+import io.kontakt.apps.anomaly.detector.testUtils.AbstractIntegrationTest;
+import io.kontakt.apps.anomaly.detector.testUtils.TestKafkaConsumer;
+import io.kontakt.apps.anomaly.detector.testUtils.TestKafkaProducer;
+import io.kontakt.apps.anomaly.detector.testUtils.TestUtils;
 import io.kontakt.apps.event.Anomaly;
 import io.kontakt.apps.event.TemperatureReading;
 import org.junit.jupiter.api.Test;
@@ -7,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.stream.IntStream;
 
 public class TemperatureMeasurementsListenerTest extends AbstractIntegrationTest {
 
@@ -27,11 +32,13 @@ public class TemperatureMeasurementsListenerTest extends AbstractIntegrationTest
                      kafkaContainer.getBootstrapServers(),
                      inputTopic
              )) {
-            TemperatureReading temperatureReading = new TemperatureReading(20d, "room", "thermometer", Instant.parse("2023-01-01T00:00:00.000Z"));
-            producer.produce(temperatureReading.thermometerId(), temperatureReading);
-            consumer.drain(
-                    consumerRecords -> consumerRecords.stream().anyMatch(r -> r.value().thermometerId().equals(temperatureReading.thermometerId())),
-                    Duration.ofSeconds(5)
+            IntStream.rangeClosed(1, 100).boxed().forEach(i -> {
+                double temperature = i % 10 == 0 ? 30 : TestUtils.generateRandomDoubleValueFromRange(19, 21);
+                TemperatureReading temperatureReading = new TemperatureReading(temperature,
+                        "room", "thermometer", Instant.parse("2023-01-01T00:00:00.000Z"));
+                producer.produce(temperatureReading.thermometerId(), temperatureReading);
+            });
+            consumer.drain(c -> c.size() > 1, Duration.ofSeconds(15)
             );
         }
     }

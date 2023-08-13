@@ -1,6 +1,7 @@
 package io.kontakt.apps.temperature.generator;
 
 import io.kontakt.apps.event.TemperatureReading;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,9 +13,20 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import static io.kontakt.apps.temperature.generator.AbstractTemperatureGenerator.generateRooms;
+
 @Slf4j
-@RequiredArgsConstructor(staticName = "of")
-public class SimpleTemperatureGenerator implements TemperatureGenerator {
+public class SimpleTemperatureGenerator
+        extends AbstractTemperatureGenerator
+        implements TemperatureGenerator {
+
+    // I have decided to divide the temperature generator ("generateTemperature()") into 3 separate generators where each generator is responsible for given step.
+    // Following steps are perormed:
+    // 1. Generation of main characteristic (I have provided two default characteristic: constant and harmonic).
+    // 2. Generation of noise (I have provided simple noise generator which use function which generates normal distribution)
+    // 3. Generation of disruptions/anomalies (I have provided simple algorithm which generates anomaly for random reading with given probability)
+    // All steps are pluggable and can be configured/injected while plugin instantiation.
+    // Temperature readings are generated for defined number of rooms and defined of number of thermometers per each room.
 
     public static final BiFunction<Long, Double, Double> CONSTANT_CHARACTERISTIC = (measurementNo, meanValue) -> meanValue;
     public static final BiFunction<Double, Double, Double> BASIC_NOISE_GENERATOR = SimpleTemperatureGenerator::generateNoise;
@@ -27,7 +39,22 @@ public class SimpleTemperatureGenerator implements TemperatureGenerator {
     private final BiFunction<Long, Double, Double> characteristic;
     private final BiFunction<Double, Double, Double> noiseGenerator;
     private final Function<Double, Double> anomalyGenerator;
-    private final List<Room> rooms;
+
+    public SimpleTemperatureGenerator(final int numberOfRooms,
+                                      final int numberOfThermometersPerRoom,
+                                      final double standardDeviation,
+                                      final double initMeanValue,
+                                      final BiFunction<Long, Double, Double> characteristic,
+                                      final BiFunction<Double, Double, Double> noiseGenerator,
+                                      final Function<Double, Double> anomalyGenerator) {
+        super(numberOfRooms, numberOfThermometersPerRoom);
+        this.standardDeviation = standardDeviation;
+        this.initMeanValue = initMeanValue;
+        this.characteristic = characteristic;
+        this.noiseGenerator = noiseGenerator;
+        this.anomalyGenerator = anomalyGenerator;
+    }
+
 
     public static SimpleTemperatureGenerator of(final int numberOfRooms,
                                          final int numberOfThermometersPerRoom,
@@ -36,8 +63,7 @@ public class SimpleTemperatureGenerator implements TemperatureGenerator {
                                          final BiFunction<Long, Double, Double> characteristic,
                                          final BiFunction<Double, Double, Double> noiseGenerator,
                                          final Function<Double, Double> anomalyGenerator) {
-        final List<Room> rooms = generateRooms(numberOfRooms, numberOfThermometersPerRoom);
-        return SimpleTemperatureGenerator.of(standardDeviation, initMeanValue, characteristic, noiseGenerator, anomalyGenerator, rooms);
+        return new SimpleTemperatureGenerator(numberOfRooms, numberOfThermometersPerRoom, standardDeviation, initMeanValue, characteristic, noiseGenerator, anomalyGenerator);
     }
 
     @Override
@@ -52,19 +78,6 @@ public class SimpleTemperatureGenerator implements TemperatureGenerator {
         return room.getThermometerUuids().stream()
                 .map(thermometerUuid -> generateSingleReading(room.getRoomUuid(), thermometerUuid))
                 .toList();
-    }
-
-    private static List<Room> generateRooms(final int numberOfRooms, final int numberOfThermometersPerRoom) {
-        return IntStream.rangeClosed(1, numberOfRooms).boxed()
-                .map(__ -> generateRoom(numberOfThermometersPerRoom))
-                .toList();
-
-    }
-    private static Room generateRoom(final int numberOfThermometersPerRoom) {
-        final List<UUID> thermometerIds = IntStream.rangeClosed(1, numberOfThermometersPerRoom).boxed()
-                .map(__ -> UUID.randomUUID())
-                .toList();
-        return Room.of(UUID.randomUUID(), thermometerIds);
     }
 
     private TemperatureReading generateSingleReading(final UUID roomUuid, final UUID thermometerUuid) {

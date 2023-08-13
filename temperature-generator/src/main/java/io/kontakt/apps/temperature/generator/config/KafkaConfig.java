@@ -26,6 +26,7 @@ class KafkaConfig {
         return publisher::getMessageProducer;
     }
 
+
     @Bean
     public static ObjectMapper objectMapper() {
         return JsonMapper.builder()

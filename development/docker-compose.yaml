@@ -38,3 +38,10 @@ services:
       - 8085:9000
     environment:
       KAFKA_BROKERCONNECT: broker-temp-task:9092
+
+  mongodb:
+    image: mongo:4.4.16
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 27017:27017

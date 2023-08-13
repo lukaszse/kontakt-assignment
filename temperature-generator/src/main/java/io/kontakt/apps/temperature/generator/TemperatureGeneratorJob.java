@@ -18,5 +18,4 @@ class TemperatureGeneratorJob {
     public void generateDataAndSend() {
         generator.generate().forEach(publisher::publish);
     }
-
 }
