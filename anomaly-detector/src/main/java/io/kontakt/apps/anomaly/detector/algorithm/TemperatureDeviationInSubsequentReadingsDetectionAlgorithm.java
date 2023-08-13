@@ -24,14 +24,14 @@ public class TemperatureDeviationInSubsequentReadingsDetectionAlgorithm
 
     private List<Anomaly> findAnomaliesInSeriesOfSubsequentReadings(final List<TemperatureReading> temperatureReadings) {
         return IntStream.range(0, temperatureReadings.size()).boxed()
-                .map(i -> getFiveElementsStartingAt(temperatureReadings, i))
+                .map(i -> getElementSequenceStartingAt(temperatureReadings, i))
                 .map(this::findAnomaliesInAllReadings)
                 .flatMap(Collection::stream)
                 .toList();
     }
 
-    private <E> List<E> getFiveElementsStartingAt(final List<E> temperatureReadings,
-                                                         final int firstElement) {
+    private List<TemperatureReading> getElementSequenceStartingAt(final List<TemperatureReading> temperatureReadings,
+                                                                  final int firstElement) {
         final int lastElement = Math.min(firstElement + readingSequenceLength, temperatureReadings.size());
         return temperatureReadings.subList(firstElement, lastElement);
     }
