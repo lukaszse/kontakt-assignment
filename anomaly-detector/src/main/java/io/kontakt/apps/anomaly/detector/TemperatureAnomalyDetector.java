@@ -18,6 +18,7 @@ public class TemperatureAnomalyDetector implements AnomalyDetector {
     public TemperatureAnomalyDetector(final AnomalyDetectionAlgorithm ... anomalyDetectionAlgorithms) {
         this.anomalyDetectionAlgorithms = Arrays.asList(anomalyDetectionAlgorithms);
     }
+
     @Override
     public List<Anomaly> apply(List<TemperatureReading> temperatureReadings) {
         return anomalyDetectionAlgorithms.stream()
