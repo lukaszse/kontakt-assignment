@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AnomalyService {
+class AnomalyService {
 
     private final AnomalyRepository anomalyRepository;
 

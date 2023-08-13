@@ -32,7 +32,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/anomalies")
 @RequiredArgsConstructor
 @Validated
-public class AnomalyEndpoint {
+class AnomalyEndpoint {
 
     private static final String X_TOTAL_COUNT_HEADER = "x-total-count";
 

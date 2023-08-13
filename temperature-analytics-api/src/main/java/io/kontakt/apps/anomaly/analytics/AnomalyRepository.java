@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 import java.awt.print.Pageable;
 
 @Repository
-public interface AnomalyRepository extends ReactiveSortingRepository<Anomaly, String> {
+interface AnomalyRepository extends ReactiveSortingRepository<Anomaly, String> {
 
     Flux<Anomaly> findAllBy(Pageable pageable);
     Flux<Anomaly> findAllByRoomId(String roomId);

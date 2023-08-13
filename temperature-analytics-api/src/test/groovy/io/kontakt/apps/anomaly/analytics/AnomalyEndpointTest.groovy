@@ -9,8 +9,8 @@ import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.web.client.HttpClientErrorException
 
+import static io.kontakt.apps.anomaly.analytics.testUtils.AnomalyTestUtils.ANOMALIES_URL_PATTERN
 import static io.kontakt.apps.anomaly.analytics.testUtils.AnomalyTestUtils.ROOM_ID
-import static io.kontakt.apps.anomaly.analytics.testUtils.AnomalyTestUtils.getANOMALIES_URL_PATTERN
 import static io.kontakt.apps.anomaly.analytics.testUtils.AnomalyTestUtils.populateDatabase
 
 class AnomalyEndpointTest extends AbstractEndpointSpec {

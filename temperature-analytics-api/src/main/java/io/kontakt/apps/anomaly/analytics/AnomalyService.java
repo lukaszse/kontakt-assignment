@@ -4,22 +4,18 @@ import io.kontakt.apps.anomaly.analytics.exception.NotFoundException;
 import io.kontakt.apps.event.Anomaly;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
-import reactor.util.function.TupleExtensionsKt;
-import reactor.util.function.Tuples;
 
 import java.awt.print.Pageable;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AnomalyService {
+class AnomalyService {
 
     private static final String NOT_FOUND_ERROR_MESSAGE = "No anomalies with meeting criteria found. %s";
 

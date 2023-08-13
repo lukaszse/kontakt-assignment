@@ -22,7 +22,7 @@ import java.util.Map;
 
 @EnableKafka
 @Configuration
-public class KafkaConfig {
+class KafkaConfig {
 
     @Value("${spring.cloud.stream.bindings.anomaly-storage-in-0.destination}")
     private String topic;

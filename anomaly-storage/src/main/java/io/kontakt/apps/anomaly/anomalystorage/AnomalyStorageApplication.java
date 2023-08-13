@@ -1,4 +1,4 @@
-package io.kontakt.apps.anomaly.analytics;
+package io.kontakt.apps.anomaly.anomalystorage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,8 +6,9 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 
 @SpringBootApplication
 @EnableWebFlux
-class AnomalyAnalyticsApplication {
-        public static void main(String[] args) {
-            SpringApplication.run(AnomalyAnalyticsApplication.class, args);
-        }
+class AnomalyStorageApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(AnomalyStorageApplication.class, args);
+    }
 }
