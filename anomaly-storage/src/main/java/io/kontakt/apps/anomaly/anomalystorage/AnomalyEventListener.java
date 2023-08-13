@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AnomalyEventListener {
 
-
     private final AnomalyService anomalyService;
 
     @KafkaListener(
